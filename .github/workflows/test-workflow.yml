@@ -1,0 +1,61 @@
+name: test-workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - name: "Download yevis binary from release"
+        if: ${{ steps.download-binary-artifact.outcome != 'success' }}
+        run: |
+          curl -fsSL -O https://github.com/sapporo-wes/yevis-cli/releases/latest/download/yevis
+          chmod +x ./yevis
+
+      - name: "Run tests"
+        id: test
+        run: |
+          mkdir -p ./test-logs ./test-results
+          SAPPORO_RUN_DIR=${GITHUB_WORKSPACE}/test-results \
+            ./yevis test \
+              --verbose \
+              --fetch-ro-crate \
+              https://raw.githubusercontent.com/sapporo-wes/yevis-cli/main/tests/test-metadata-CWL-validated.yml \
+              2>&1 | tee ./test-logs/yevis-log.txt
+          exit ${PIPESTATUS[0]}
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "List test results"
+        run: sudo ls -lR ./test-results > ./test-logs/test-results-list.txt
+
+      - name: "Upload test logs"
+        uses: actions/upload-artifact@v3
+        with:
+          name: yevis-test-logs
+          path: test-logs/*
+          if-no-files-found: ignore
+
+      - name: "Comment to the pull request"
+        run: |
+          if [[ "${{ steps.test.outcome }}" == "success" ]]; then
+            gh pr --repo ${{ github.repository }} edit ${{ github.event.pull_request.number }} --remove-label invalid
+          else
+            gh pr --repo ${{ github.repository }} edit ${{ github.event.pull_request.number }} --add-label invalid
+          fi
+          COMMENT=$(cat <<EOF
+          ## Test results
+          - Test status: ${{ steps.test.outcome }}
+          - Test URL: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
+            - Test logs artifact: yevis-test-logs
+          EOF
+          )
+          gh pr --repo ${{ github.repository }} comment ${{ github.event.pull_request.number }} --body "${COMMENT}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Check test status"
+        if: ${{ steps.test.outcome != 'success' }}
+        run: exit 1
