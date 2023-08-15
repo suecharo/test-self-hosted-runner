@@ -9,14 +9,17 @@ jobs:
     steps:
       - name: Check env
         run: |
-          echo "=== env ==="
+          echo "=== $ env ==="
           env
-          echo "=== docker ps ==="
+          echo "=== $ docker ps ==="
           docker ps
-          echo "=== ls / ==="
+          echo "=== $ ls / ==="
           ls /
           echo "=== pwd ==="
           pwd
+          echo "=== $ ls ./ -lah ==="
+          ls ./ -lah
+
       - name: "Download yevis binary from release"
         if: ${{ steps.download-binary-artifact.outcome != 'success' }}
         run: |
@@ -34,20 +37,5 @@ jobs:
               https://raw.githubusercontent.com/sapporo-wes/yevis-cli/main/tests/test-metadata-CWL-validated.yml \
               2>&1 | tee ./test-logs/yevis-log.txt
           exit ${PIPESTATUS[0]}
-        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "List test results"
-        run: sudo ls -lR ./test-results > ./test-logs/test-results-list.txt
-
-      - name: "Upload test logs"
-        uses: actions/upload-artifact@v3
-        with:
-          name: yevis-test-logs
-          path: test-logs/*
-          if-no-files-found: ignore
-
-      - name: "Check test status"
-        if: ${{ steps.test.outcome != 'success' }}
-        run: exit 1
