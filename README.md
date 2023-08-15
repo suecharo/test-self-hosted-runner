@@ -80,11 +80,11 @@ Docker version 24.0.5, build ced0996
 
 `[Repository Settings] - [Actions] - Runners`
 
-<replace-screenshot>
+<img width="720" alt="スクリーンショット 2023-08-15 16 09 14" src="https://github.com/suecharo/test-self-hosted-runner/assets/26019402/ea71b66e-8352-49c0-a4f1-427cc28e95ff">
 
 OS と Architecture を選択すると、Token 入りのコマンドが表示される
 
-<replace-screenshot>
+<img width="720" alt="スクリーンショット 2023-08-15 16 13 00" src="https://github.com/suecharo/test-self-hosted-runner/assets/26019402/edfcead4-3e78-4265-a24c-bf6d842e3e95">
 
 ```bash
 suecharo@srv:~/sandbox$ mkdir actions-runner && cd actions-runner
@@ -187,7 +187,7 @@ Enter name of work folder: [press Enter for _work]
 
 この時点で、GitHub Actions の Runner 一覧に表示される (Runner を起動していないので status は `Offline`)
 
-<replace-screenshot>
+<img width="720" alt="スクリーンショット 2023-08-15 16 18 21" src="https://github.com/suecharo/test-self-hosted-runner/assets/26019402/a691754c-3b35-466b-a49a-4763e3fb7170">
 
 ```bash
 suecharo@srv:~/sandbox/actions-runner$ ./run.sh 
@@ -200,7 +200,7 @@ Current runner version: '2.307.1'
 
 起動した。status が `Idle` になる
 
-<replace-screenshot>
+<img width="720" alt="スクリーンショット 2023-08-15 16 21 31" src="https://github.com/suecharo/test-self-hosted-runner/assets/26019402/817826f8-a4c4-4e15-82be-377a5fd4f3a0">
 
 適当な tcp が local -> GitHub に張られている
 
