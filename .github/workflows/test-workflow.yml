@@ -7,6 +7,16 @@ jobs:
   test:
     runs-on: self-hosted
     steps:
+      - name: Check env
+        run: |
+          echo "=== env ==="
+          env
+          echo "=== docker ps ==="
+          docker ps
+          echo "=== ls / ==="
+          ls /
+          echo "=== pwd ==="
+          pwd
       - name: "Download yevis binary from release"
         if: ${{ steps.download-binary-artifact.outcome != 'success' }}
         run: |
