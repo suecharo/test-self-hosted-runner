@@ -38,24 +38,6 @@ jobs:
           path: test-logs/*
           if-no-files-found: ignore
 
-      - name: "Comment to the pull request"
-        run: |
-          if [[ "${{ steps.test.outcome }}" == "success" ]]; then
-            gh pr --repo ${{ github.repository }} edit ${{ github.event.pull_request.number }} --remove-label invalid
-          else
-            gh pr --repo ${{ github.repository }} edit ${{ github.event.pull_request.number }} --add-label invalid
-          fi
-          COMMENT=$(cat <<EOF
-          ## Test results
-          - Test status: ${{ steps.test.outcome }}
-          - Test URL: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
-            - Test logs artifact: yevis-test-logs
-          EOF
-          )
-          gh pr --repo ${{ github.repository }} comment ${{ github.event.pull_request.number }} --body "${COMMENT}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: "Check test status"
         if: ${{ steps.test.outcome != 'success' }}
         run: exit 1
