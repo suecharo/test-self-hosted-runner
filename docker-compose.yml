@@ -1,0 +1,14 @@
+version: "3.5"
+services:
+  app:
+    image: gh-self-hosted-runner:latest
+    container_name: gh-self-hosted-runner
+    volumes:
+      # for persistent storage
+      # - ${PWD}/work:/work/_work
+      # for docker sibling containers
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    restart: on-failure
+    working_dir: /work
+    command: [ "./run.sh" ]

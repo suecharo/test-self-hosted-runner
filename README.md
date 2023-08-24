@@ -56,8 +56,7 @@ GitHub Actions の Self-hosted Runner を試した際のメモ
 
 ### Environment
 
-```bash
-$ cat /etc/os-release
+```bash$ cat /etc/os-release
 PRETTY_NAME="Ubuntu 22.04.3 LTS"
 NAME="Ubuntu"
 VERSION_ID="22.04"
@@ -69,10 +68,8 @@ HOME_URL="https://www.ubuntu.com/"
 SUPPORT_URL="https://help.ubuntu.com/"
 BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
 PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-UBUNTU_CODENAME=jammy
-$ uname -a
-Linux suecharo-server 5.15.0-78-generic #85-Ubuntu SMP Fri Jul 7 15:25:09 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-$ docker --version
+UBUNTU_CODENAME=jammy$ uname -a
+Linux suecharo-server 5.15.0-78-generic #85-Ubuntu SMP Fri Jul 7 15:25:09 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux$ docker --version
 Docker version 24.0.5, build ced0996
 ```
 
@@ -87,16 +84,16 @@ OS と Architecture を選択すると、Token 入りのコマンドが表示さ
 <img width="720" alt="スクリーンショット 2023-08-15 16 13 00" src="https://github.com/suecharo/test-self-hosted-runner/assets/26019402/edfcead4-3e78-4265-a24c-bf6d842e3e95">
 
 ```bash
-suecharo@srv:~/sandbox$ mkdir actions-runner && cd actions-runner
-suecharo@srv:~/sandbox/actions-runner$ curl -o actions-runner-linux-x64-2.307.1.tar.gz -L https://github.com/actions/runner/releases/download/v2.307.1/actions-runner-linux-x64-2.307.1.tar.gz
+$ mkdir actions-runner && cd actions-runner
+$ curl -o actions-runner-linux-x64-2.307.1.tar.gz -L https://github.com/actions/runner/releases/download/v2.307.1/actions-runner-linux-x64-2.307.1.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
 100  137M  100  137M    0     0  66.1M      0  0:00:02  0:00:02 --:--:-- 72.3M
-suecharo@srv:~/sandbox/actions-runner$ echo "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441  actions-runner-linux-x64-2.307.1.tar.gz" | shasum -a 256 -c
+$ echo "038c9e98b3912c5fd6d0b277f2e4266b2a10accc1ff8ff981b9971a8e76b5441  actions-runner-linux-x64-2.307.1.tar.gz" | shasum -a 256 -c
 actions-runner-linux-x64-2.307.1.tar.gz: OK
-suecharo@srv:~/sandbox/actions-runner$ tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
-suecharo@srv:~/sandbox/actions-runner$ ls -l
+$ tar xzf ./actions-runner-linux-x64-2.307.1.tar.gz
+$ ls -l
 total 140824
 -rw-rw-r-- 1 suecharo suecharo 144153186 Aug 15 16:14 actions-runner-linux-x64-2.307.1.tar.gz
 drwxr-xr-x 4 suecharo suecharo     16384 Jul 25 21:41 bin
@@ -110,7 +107,7 @@ drwxr-xr-x 6 suecharo suecharo      4096 Jul 25 21:41 externals
 ```
 
 ```bash
-suecharo@srv:~/sandbox/actions-runner$ ./config.sh --help
+$ ./config.sh --help
 
 Commands:
  ./config.sh         Configures the runner
@@ -148,7 +145,7 @@ Examples:
  Configure a runner non-interactively with three extra labels:
   ./config.sh --unattended --url <url> --token <token> --labels L1,L2,L3
 
-suecharo@srv:~/sandbox/actions-runner$ ./config.sh --url https://github.com/suecharo/test-self-hosted-runner --token <token>
+$ ./config.sh --url https://github.com/suecharo/test-self-hosted-runner --token <token>
 
 --------------------------------------------------------------------------------
 |        ____ _ _   _   _       _          _        _   _                      |
@@ -190,7 +187,7 @@ Enter name of work folder: [press Enter for _work]
 <img width="720" alt="スクリーンショット 2023-08-15 16 18 21" src="https://github.com/suecharo/test-self-hosted-runner/assets/26019402/a691754c-3b35-466b-a49a-4763e3fb7170">
 
 ```bash
-suecharo@srv:~/sandbox/actions-runner$ ./run.sh 
+$ ./run.sh 
 
 √ Connected to GitHub
 
@@ -205,7 +202,7 @@ Current runner version: '2.307.1'
 適当な tcp が local -> GitHub に張られている
 
 ```bash
-suecharo@srv:~/sandbox/actions-runner$ netstat -tp | grep Runner
+$ netstat -tp | grep Runner
 tcp6       0      0 suecharo-server:60624   2620:1ec:21::16:https   ESTABLISHED 110654/Runner.Liste 
 ```
 
@@ -215,7 +212,7 @@ tcp6       0      0 suecharo-server:60624   2620:1ec:21::16:https   ESTABLISHED 
 また、host では、sapporo の docker container などが立ち上がっている
 
 ```bash
-suecharo@srv:~/sandbox/actions-runner$ docker ps
+$ docker ps
 CONTAINER ID   IMAGE                                         COMMAND                  CREATED          STATUS          PORTS                                       NAMES
 445ccf01a32d   quay.io/commonwl/cwltool:3.1.20220628170238   "/cwltool-in-docker.…"   5 seconds ago    Up 5 seconds                                                ecstatic_gauss
 3b264b94eccb   ghcr.io/sapporo-wes/sapporo-service:latest    "tini -- sapporo --r…"   20 seconds ago   Up 20 seconds   0.0.0.0:1122->1122/tcp, :::1122->1122/tcp   yevis-sapporo-service
@@ -226,7 +223,7 @@ CONTAINER ID   IMAGE                                         COMMAND            
   - また、job 終了後、cleanup される訳でも無い
 
 ```bash
-suecharo@srv:~/sandbox/actions-runner$ tree _work/
+$ tree _work/
 _work/
 ├── _PipelineMapping
 │   └── suecharo
@@ -294,11 +291,11 @@ _work/
 
 ```bash
 # ubuntu:22.04 の起動
-suecharo@srv:~/sandbox$ mkdir actions-runner-docker
-suecharo@srv:~/sandbox$ cd actions-runner-docker/
-suecharo@srv:~/sandbox/actions-runner-docker$ mkdir work
-suecharo@srv:~/sandbox/actions-runner-docker$ docker network create yevis-network
-suecharo@srv:~/sandbox/actions-runner-docker$ docker run -it --rm -v $PWD/work:/work --workdir /work -v /var/run/docker.sock:/var/run/docker.sock --network yevis-network ubuntu:22.04 bash
+$ mkdir actions-runner-docker
+$ cd actions-runner-docker/
+$ mkdir work
+$ docker network create yevis-network
+$ docker run -it --rm -v $PWD/work:/work --workdir /work -v /var/run/docker.sock:/var/run/docker.sock --network yevis-network ubuntu:22.04 bash
 
 # docker などの下準備
 root@fb3bbce0d0bc:/work# apt update && apt install -y curl
@@ -382,3 +379,23 @@ Current runner version: '2.307.1'
 起動できたから、再度、<https://github.com/suecharo/test-self-hosted-runner/blob/main/.github/workflows/test-workflow.yml> を実行してみる
 
 Done. <https://github.com/suecharo/test-self-hosted-runner/actions/runs/5865193020/job/15901639772>
+
+### with Dockerfile and docker-compose
+
+Using [`./Dockerfile`](./Dockerfile) and [`./docker-compose.yml`](./docker-compose.yml)
+
+上と同じ手順で (GitHub Web UI 上から)、token と repository_url を取得してくる
+
+```bash
+$ docker build -t gh-self-hosted-runner:latest . \
+  --build-arg GH_TOKEN=<token> \
+  --build-arg REPO_URL=https://github.com/suecharo/test-self-hosted-runner \
+  --build-arg RUNNER_NAME=docker-runner
+...
+$ docker compose up -d
+[+] Running 2/2
+ ✔ Network test-self-hosted-runner_default  Created                          0.1s 
+ ✔ Container gh-self-hosted-runner          Started                          0.3s 
+$ docker compose logs -f
+gh-self-hosted-runner  | √ Connected to GitHub
+```
