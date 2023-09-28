@@ -8,19 +8,12 @@ on:
       - opened
       - synchronize
       - reopened
-  issue_comment:
-    types:
-      - created
 
 jobs:
   test:
     runs-on: ubuntu-22.04
     if: >
-      (github.event.action == 'issue_comment' &&
-      contains(github.event.comment.html_url, '/pull/') &&
-      startsWith(github.event.comment.body, '/re-run') &&
-      contains(github.event.pull_request.labels.*.name, 'nig-gpu')) ||
-      (github.event.action != 'issue_comment' &&
+      (github.event.action == 'pull_request' &&
       contains(github.event.pull_request.labels.*.name, 'nig-gpu'))
     steps:
       - run: |
