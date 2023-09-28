@@ -24,10 +24,10 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     if: >
-      (github.event.action == 'issue_comment' &&
+      (github.event_name == 'issue_comment' &&
       contains(github.event.comment.html_url, '/pull/') &&
       startsWith(github.event.comment.body, '/re-run')) ||
-      (github.event.action == 'pull_request_target' &&
+      (github.event_name == 'pull_request_target' &&
       !contains(github.event.pull_request.labels.*.name, 'nig-gpu'))
     steps:
       - run: |
