@@ -10,6 +10,13 @@ on:
       - reopened
 
 jobs:
+  debug:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
   test:
     runs-on: ubuntu-22.04
     if: >
