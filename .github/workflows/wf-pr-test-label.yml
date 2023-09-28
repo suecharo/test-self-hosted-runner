@@ -15,6 +15,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-22.04
-    if: contains(github.event.pull_request.labels.*.name, 'nig-gpu')
+    if: >
+      (github.event.action == 'issue_comment' &&
+      contains(github.event.comment.html_url, '/pull/') &&
+      startsWith(github.event.comment.body, '/re-run') &&
+      contains(github.event.pull_request.labels.*.name, 'nig-gpu')) ||
+      (github.event.action != 'issue_comment' &&
+      contains(github.event.pull_request.labels.*.name, 'nig-gpu'))
     steps:
-      - uses: hmarr/debug-action@v2
+      - run: |
+          echo "pr-test-label"
