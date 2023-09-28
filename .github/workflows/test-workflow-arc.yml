@@ -1,0 +1,43 @@
+name: test-workflow-arc
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: suecharo-srv-arc
+    steps:
+      - name: Check env
+        run: |
+          echo "=== $ env ==="
+          env
+          echo "=== $ docker ps ==="
+          docker ps
+          echo "=== $ ls / ==="
+          ls /
+          echo "=== pwd ==="
+          pwd
+          echo "=== $ ls ./ -lah ==="
+          ls ./ -lah
+          echo "=== touch ./foo.txt ==="
+          touch ./foo.txt
+
+      - name: "Download yevis binary from release"
+        if: ${{ steps.download-binary-artifact.outcome != 'success' }}
+        run: |
+          curl -fsSL -O https://github.com/sapporo-wes/yevis-cli/releases/latest/download/yevis
+          chmod +x ./yevis
+
+      - name: "Run tests"
+        id: test
+        run: |
+          mkdir -p ./test-logs ./test-results
+          SAPPORO_RUN_DIR=${GITHUB_WORKSPACE}/test-results \
+            ./yevis test \
+              --verbose \
+              --fetch-ro-crate \
+              https://raw.githubusercontent.com/sapporo-wes/yevis-cli/main/tests/test-metadata-CWL-validated.yml \
+              2>&1 | tee ./test-logs/yevis-log.txt
+          exit ${PIPESTATUS[0]}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
