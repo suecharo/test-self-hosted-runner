@@ -1,4 +1,4 @@
-name: "wf-pr-test"
+name: "debug"
 
 on:
   pull_request_target:
@@ -8,15 +8,14 @@ on:
       - opened
       - synchronize
       - reopened
+      - closed
   issue_comment:
     types:
       - created
       - edited
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-22.04
-    if: !contains(github.event.pull_request.labels.*.name, 'nig-gpu')
     steps:
-      - run: |
-          echo "pr-test"
+      - uses: hmarr/debug-action@v2
