@@ -21,6 +21,12 @@ jobs:
           ls ./ -lah
           echo "=== touch ./foo.txt ==="
           touch ./foo.txt
+          echo "=== id -a ==="
+          id -a
+          echo "=== uname -a ==="
+          uname -a
+          echo "=== cat /etc/os-release ==="
+          cat /etc/os-release
 
       - name: "Download yevis binary from release"
         run: |
