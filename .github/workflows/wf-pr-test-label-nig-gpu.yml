@@ -14,7 +14,7 @@ on:
 
 jobs:
   test:
-    runs-on: nig-gpu
+    runs-on: self-hosted
     if: >
       (github.event_name == 'issue_comment' &&
       contains(github.event.comment.html_url, '/pull/') &&
