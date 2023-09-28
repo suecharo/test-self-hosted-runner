@@ -1,0 +1,18 @@
+name: "wf-pr-test"
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'nig-gpu') }}
+    steps:
+      - run: |
+          echo "pr-test"
