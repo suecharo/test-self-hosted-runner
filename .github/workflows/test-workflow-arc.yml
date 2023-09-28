@@ -13,6 +13,8 @@ jobs:
           env
           echo "=== $ docker ps ==="
           docker ps
+          echo "=== $ docker context ls ==="
+          docker context ls
           echo "=== $ ls / ==="
           ls /
           echo "=== pwd ==="
