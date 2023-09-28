@@ -1,0 +1,29 @@
+name: "wf-pr-test-label-nig-gpu"
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  test:
+    runs-on: nig-gpu
+    if: >
+      (github.event_name == 'issue_comment' &&
+      contains(github.event.comment.html_url, '/pull/') &&
+      startsWith(github.event.comment.body, '/re-run') &&
+      contains(github.event.issue.labels.*.name, 'nig-gpu')) ||
+      (github.event_name == 'pull_request_target' &&
+      contains(github.event.pull_request.labels.*.name, 'nig-gpu'))
+    steps:
+      - run: |
+          which yevis
+      - run: |
+          curl http://172.19.7.164:1122/service-info
