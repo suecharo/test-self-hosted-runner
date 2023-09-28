@@ -8,7 +8,6 @@ on:
       - opened
       - synchronize
       - reopened
-      - labeled
   issue_comment:
     types:
       - created
@@ -26,7 +25,8 @@ jobs:
     if: >
       (github.event_name == 'issue_comment' &&
       contains(github.event.comment.html_url, '/pull/') &&
-      startsWith(github.event.comment.body, '/re-run')) ||
+      startsWith(github.event.comment.body, '/re-run') &&
+      !contains(github.event.issue.labels.*.name, 'nig-gpu')) ||
       (github.event_name == 'pull_request_target' &&
       !contains(github.event.pull_request.labels.*.name, 'nig-gpu'))
     steps:
