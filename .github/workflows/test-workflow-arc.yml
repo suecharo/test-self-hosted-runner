@@ -44,6 +44,7 @@ jobs:
           SAPPORO_RUN_DIR=${GITHUB_WORKSPACE}/test-results \
             ./yevis test \
               --verbose \
+              --docker-host ${DOCKER_HOST} \
               --fetch-ro-crate \
               https://raw.githubusercontent.com/sapporo-wes/yevis-cli/main/tests/test-metadata-CWL-validated.yml \
               2>&1 | tee ./test-logs/yevis-log.txt
