@@ -10,7 +10,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-22.04
-    if: ${{ github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nig-gpu') }}
+    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'nig-gpu')
     steps:
+      - uses: hmarr/debug-action@v2
       - run: |
           echo "pr-publish-label"

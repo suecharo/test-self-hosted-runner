@@ -8,11 +8,13 @@ on:
       - opened
       - synchronize
       - reopened
+  issue_comment:
+    types:
+      - created
 
 jobs:
   test:
     runs-on: ubuntu-22.04
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'nig-gpu') }}
+    if: contains(github.event.pull_request.labels.*.name, 'nig-gpu')
     steps:
-      - run: |
-          echo "pr-test-label"
+      - uses: hmarr/debug-action@v2
