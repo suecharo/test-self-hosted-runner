@@ -23,7 +23,6 @@ jobs:
           touch ./foo.txt
 
       - name: "Download yevis binary from release"
-        if: ${{ steps.download-binary-artifact.outcome != 'success' }}
         run: |
           curl -fsSL -O https://github.com/sapporo-wes/yevis-cli/releases/latest/download/yevis
           chmod +x ./yevis
