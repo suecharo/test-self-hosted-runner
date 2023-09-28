@@ -30,6 +30,8 @@ jobs:
 
       - name: "Download yevis binary from release"
         run: |
+          # install curl
+          sudo apt update && sudo apt install -y curl
           curl -fsSL -O https://github.com/sapporo-wes/yevis-cli/releases/latest/download/yevis
           chmod +x ./yevis
 
